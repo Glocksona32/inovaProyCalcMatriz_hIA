@@ -7,17 +7,31 @@ namespace inovaProyCalcMatriz_hIA
         static void Main()
         {
             Console.WriteLine("Método de Gauss-Jordan para resolver matrices inversas" + "\n");
-
+            int n;
             // Pedir al usuario la dimensión de la matriz cuadrada
             Console.Write("Ingrese la dimensión de la matriz cuadrada: ");
-            int n = Convert.ToInt32(Console.ReadLine());
+            do
+            {
+                n = Convert.ToInt32(Console.ReadLine());
+
+                if (n > 3)
+                {
+                    Console.WriteLine("Escribe una matriz mas pequeña");
+                }
+                else if(n<2)
+                {
+                    Console.WriteLine("Escribir una matriz mas grande");
+                }
+
+            } while (n < 1 || n > 3);
+
 
             // Crear la matriz y el vector identidad
             double[,] A = new double[n, n];
-            double[,] I = new double[n, n];
+            double[,] B = new double[n, n];
             for (int i = 0; i < n; i++)
             {
-                I[i, i] = 1;
+                B[i, i] = 1;
             }
 
             // Pedir al usuario los elementos de la matriz
@@ -42,6 +56,34 @@ namespace inovaProyCalcMatriz_hIA
                 Console.WriteLine();
             }
 
+            //dererminante 
+
+            bool n1;
+            if (n > 2) //matriz de 3x3 
+            {
+                n1 = true;
+            }
+            else { n1 = false; } //matriz de 2x2
+            double PD;//POSITIVO DETERMIANTE
+            double ND; // NEGATIVO DETERMINANTE
+            double determinante = 0;
+
+            if (n1 == true)
+            {
+                PD = A[0, 0] * A[1, 1] * A[2, 2] + A[1, 0] * A[2, 1] * A[0, 2] + A[2, 0] * A[0, 1] * A[1, 2];
+                ND = A[2, 0] * A[1, 1] * A[0, 2] + (A[0, 0] * A[2, 1] * A[2, 1]) + A[1, 0] * A[0, 1] * A[2, 2];
+                determinante = PD - ND;
+            }
+            else if (n1 == false)
+            {
+                PD = (A[0, 0] * A[1, 1]);
+                ND = (A[1, 0] * A[0, 1]);
+                determinante = PD - ND;
+            }
+
+            Console.WriteLine("La determinante es: " + determinante);
+
+
             // Algoritmo de Gauss-Jordan
             for (int k = 0; k < n; k++)
             {
@@ -49,7 +91,7 @@ namespace inovaProyCalcMatriz_hIA
                 for (int j = 0; j < n; j++)
                 {
                     A[k, j] /= pivot;
-                    I[k, j] /= pivot;
+                    B[k, j] /= pivot;
                 }
                 for (int i = 0; i < n; i++)
                 {
@@ -59,24 +101,26 @@ namespace inovaProyCalcMatriz_hIA
                         for (int j = 0; j < n; j++)
                         {
                             A[i, j] -= factor * A[k, j];
-                            I[i, j] -= factor * I[k, j];
+                            B[i, j] -= factor * B[k, j];
                         }
                     }
                 }
             }
 
+            
             // Imprimir la matriz inversa
             Console.WriteLine("Matriz inversa:");
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    Console.Write("{0}\t", I[i, j]);
+                    Console.Write("{0}\t", B[i, j]);
                 }
                 Console.WriteLine();
             }
 
             Console.ReadLine();
+            
         }
     }
 }
